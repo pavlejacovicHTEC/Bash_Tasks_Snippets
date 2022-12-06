@@ -21,3 +21,8 @@ The easiest way to order logs that are in example_input_file.txt:
 ### Create_logs_table2.sh
 
 The task was done on different ways for practice purposes and each section is commented out
+
+
+#### Questions
+
+*Questions are part of the comments in scripts*

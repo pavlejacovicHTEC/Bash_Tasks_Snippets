@@ -83,4 +83,8 @@ while read -r line; do
 done <$INPUT_FILE
 
 
+#dodaj sed awk i grep
+#sed je dobar kad treba nesto da se promeni
+#awk
+
 

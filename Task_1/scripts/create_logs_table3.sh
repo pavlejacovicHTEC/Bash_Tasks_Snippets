@@ -34,12 +34,69 @@ then
   echo "$STARTING_TEMPLATE" >> $OUTPUT_FILE
 fi
 
-#Reads output file line by line, filters data, and writes that data to an output file in table format
+while read -r line; do
+  if [[ $line == *"HOME"* || $line == *"AWAY"* ]];
+  then
 
-#Print the entire file
-#awk '{print}' $INPUT_FILE
+    #removes ] [ and " characters
+    line=$(echo $line | sed 's/\]//g; s/\[//g; s/"//g' )
 
-#Print the HOME and AWAY patern
-awk '/HOME/ {print} /AWAY/ {print}' $INPUT_FILE
+    #prints first element in line (elements are seperated with whitespace)
+    user_address=$(echo $line | awk '{print $1}')
+    echo -n "|$user_address|" >> $OUTPUT_FILE
+
+    rfc931=$(echo $line | awk '{print $2}')
+    echo -n "$rfc931|" >> $OUTPUT_FILE
+
+    user_auth=$(echo $line | awk '{print $3}')
+    echo -n "$user_auth|" >> $OUTPUT_FILE
+
+    date_time=$(echo $line | awk '{print $4}')
+    echo -n "$date_time|" >> $OUTPUT_FILE
+
+    gmt_offset=$(echo $line | awk '{print $5}')
+    echo -n "$gmt_offset|" >> $OUTPUT_FILE
+
+    action=$(echo $line | awk '{print $6,$7,$8}')
+    echo -n "$action|" >> $OUTPUT_FILE
+
+    return_code=$(echo $line | awk '{print $9}')
+    echo -n "$return_code|" >> $OUTPUT_FILE
+
+    size_code=$(echo $line | awk '{print $10}')
+    echo -n "$size_code|" >> $OUTPUT_FILE
+
+    refferer=$(echo $line | awk '{print $11}')
+    echo -n "$refferer|" >> $OUTPUT_FILE
+
+    accpoInfo=$(echo $line | awk '{print $12,$13,$14,$15}')
+    accpoInfo=$(echo $accpoInfo | sed 's/.$//g')
+    echo -n "$accpoInfo|" >> $OUTPUT_FILE
+
+    echo "" >> $OUTPUT_FILE
+
+  fi
+done <$INPUT_FILE
+
+#Replace second occurrence of ip 111.222.333.123 to 111.222.333.129 only once
+condition1=$(grep 111.222.333.129 $OUTPUT_FILE)
+if [[ $condition1=="" ]]
+then
+  #using sed only ( hard way )
+  #sed --i "/111.222.333.123/ {n; :a; /111.222.333.123/! {N; ba;}; s/111.222.333.123/111.222.333.129/; :b; n; $! bb}" $OUTPUT_FILE
+
+  #using sed only ( easy way )
+  #sed '0,/111.222.333.123/!{0,/111.222.333.123/s/111.222.333.123/111.222.333.129/}' $OUTPUT_FILE
+
+  #using sed and awk
+  #target_line_number=$(awk -v n=2 '/111.222.333.123/ {getline; print NR; exit}' $OUTPUT_FILE)
+  #sed "${target_line_number}s/111.222.333.123/111.222.333.129/1" $OUTPUT_FILE
+
+  #using grep and sed
+  #target_line_number=$(grep -n -m2 111.222.333.123 $OUTPUT_FILE | tail -n1 |  cut -d : -f 1)
+  #target_line_number="$(($target_line_number - 3))"
+  #sed "${target_line_number}s/111.222.333.123/111.222.333.129/1" $OUTPUT_FILE
 
 
+
+fi

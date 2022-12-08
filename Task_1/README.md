@@ -23,6 +23,24 @@ The easiest way to order logs that are in example_input_file.txt:
 The task was done on different ways for practice purposes and each section is commented out
 
 
+### Create_logs_table3.sh
+
+Practicing operations using awk sed and grep
+````
+awk examples https://www.geeksforgeeks.org/awk-command-unixlinux-examples/
+
+sed examples https://www.geeksforgeeks.org/sed-command-in-linux-unix-with-examples/
+````
+
+### Create_logs_table4.sh
+
+Each ip address must be present only once in the final table
+````
+1. First we need to put each line with ip address into a variable in a way  that lines with same ip don't exist.
+
+2. Second we right those variables into a table.
+````
+
 #### Questions
 
 *Questions are part of the comments in scripts*

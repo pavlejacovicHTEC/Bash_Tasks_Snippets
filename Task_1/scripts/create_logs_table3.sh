@@ -85,18 +85,45 @@ then
   #using sed only ( hard way )
   #sed --i "/111.222.333.123/ {n; :a; /111.222.333.123/! {N; ba;}; s/111.222.333.123/111.222.333.129/; :b; n; $! bb}" $OUTPUT_FILE
 
-  #using sed only ( easy way )
-  #sed '0,/111.222.333.123/!{0,/111.222.333.123/s/111.222.333.123/111.222.333.129/}' $OUTPUT_FILE
+  using sed only ( easy way )
+  sed --i '0,/111.222.333.123/!{0,/111.222.333.123/s/111.222.333.123/111.222.333.129/}' $OUTPUT_FILE
 
   #using sed and awk
   #target_line_number=$(awk -v n=2 '/111.222.333.123/ {getline; print NR; exit}' $OUTPUT_FILE)
-  #sed "${target_line_number}s/111.222.333.123/111.222.333.129/1" $OUTPUT_FILE
+  #sed --i "${target_line_number}s/111.222.333.123/111.222.333.129/1" $OUTPUT_FILE
 
   #using grep and sed
   #target_line_number=$(grep -n -m2 111.222.333.123 $OUTPUT_FILE | tail -n1 |  cut -d : -f 1)
-  #target_line_number="$(($target_line_number - 3))"
-  #sed "${target_line_number}s/111.222.333.123/111.222.333.129/1" $OUTPUT_FILE
-
-
-
+  #sed --i"${target_line_number}s/111.222.333.123/111.222.333.129/1" $OUTPUT_FILE
 fi
+
+
+#Get only one record of unique ip address
+
+#number_of_lines=$(cat $OUTPUT_FILE | grep 'HOME\|AWAY' | wc -l)
+
+#awk '/HOME|AWAY/ {print $0}' $INPUT_FILE
+
+#my_array=($(awk '/HOME|AWAY/ { print }' $INPUT_FILE))
+#
+#for element in ${my_array[@]}; do
+#  echo $element
+#done
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -18,7 +18,13 @@ COMMAND_AVAILABLE=$(echo $GIT_COMMANDS | grep $COMMAND)
 
 if [[ ! -d $DIRECTORY_LOCATION ]];
 then
-  echo ">>>> Please provide the valid directory location (-dl <directory_location>)! <<<<"
+  echo ">>>> Please provide the valid directory location (-d <directory_location>)! <<<<"
+  exit 0;
+fi
+
+if [[ ${DIRECTORY_LOCATION: -1} != '/' ]];
+then
+  echo ">>>>directory_location has to end with / symbol ! <<<<"
   exit 0;
 fi
 
@@ -41,10 +47,6 @@ then
   exit 0;
 fi
 
-# Save current IFS (Internal Field Separator)
-SAVEIFS=$IFS
-# Change IFS to newline char
-IFS=$'\n'
 
 #Iterate through folders and pull changes for every folder that is not excluded in the ignore file
 for dir in $DIRECTORY_LOCATION*; do
@@ -52,9 +54,9 @@ for dir in $DIRECTORY_LOCATION*; do
   #if folder has whitespace in name, add escape character so linux understands it
   if [[ $dir =~ ( |\') ]];
   then
-    echo "Directory has spaces: $dir"
+    #echo "Directory has spaces: $dir"
     dir=$(echo $dir | sed 's/ /\\ /g')
-    echo "Changing to $dir"
+    #echo "Changing to $dir"
   fi
 
   if [[ -d $dir && -d "$dir/.git" ]];

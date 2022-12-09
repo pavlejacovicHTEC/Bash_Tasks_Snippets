@@ -14,7 +14,13 @@ IGNORE_FILE="$ignore_file"
 
 if [[ ! -d $DIRECTORY_LOCATION ]];
 then
-  echo ">>>> Please provide the valid directory location (-dl <directory_location>) <<<<"
+  echo ">>>> Please provide the valid directory location (-d <directory_location>)! <<<<"
+  exit 0;
+fi
+
+if [[ ${DIRECTORY_LOCATION: -1} != '/' ]];
+then
+  echo ">>>>directory_location has to end with / symbol ! <<<<"
   exit 0;
 fi
 

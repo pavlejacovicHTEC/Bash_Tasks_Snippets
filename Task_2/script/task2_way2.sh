@@ -49,7 +49,7 @@ IFS=$'\n'
 #Iterate through folders and pull changes for every folder that is not excluded in the ignore file
 for dir in $DIRECTORY_LOCATION*; do
 
-  #if folder has whitespace in name
+  #if folder has whitespace in name, add escape character so linux understands it
   if [[ $dir =~ ( |\') ]];
   then
     echo "Directory has spaces: $dir"

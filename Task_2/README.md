@@ -15,13 +15,19 @@ Additional:
 
 ### task2_way1.sh
 
-1. Reads excluded folders from ignore folder
+1. Reads excluded folders from ignore file
 2. Loads them into array
 3. Iterates through wanted location and skips all elements of that array
-4. Runs git command
+4. Runs git pull
 
-### task2_way1.sh
+### task2_way2.sh
 
 1. Iterates through folders on wanted location
 2. Checks with grep if they are excluded
-3. Runs git command
+3. Runs wanted git command (pull/branch) based on passed argument
+4. Checks if folder has whitespaces and escape them so it can iterate through
+
+### task2_way3.sh
+
+## TO DO
+1. Add depth level as argument

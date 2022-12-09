@@ -48,11 +48,11 @@ while read -r line; do
     line=$(echo $line | sed 's/\]//g; s/\[//g; s/"//g' )
 
     temp1=$(echo "$line" |awk '{print $1}')
-    temp2=$(echo "${my_array1[@]}" | grep "$temp1")
+    temp2=$(echo "${my_array[@]}" | grep "$temp1")
 
     if [[ ${#temp2} == 0 ]];
     then
-     my_array1+=($line)
+     my_array+=($line)
     fi
 
   fi
@@ -62,38 +62,38 @@ done <$INPUT_FILE
 IFS=$SAVEIFS
 
 #Iterate through filtered array
-for (( i=0; i<${#my_array1[@]}; i++ ))
+for (( i=0; i<${#my_array[@]}; i++ ))
 do
    #echo -e "element $i: ${my_array1[$i]}"
 
-  user_address=$(echo ${my_array1[$i]} | awk '{print $1}')
+  user_address=$(echo ${my_array[$i]} | awk '{print $1}')
   echo -n "|$user_address|" >> $OUTPUT_FILE
 
-  rfc931=$(echo ${my_array1[$i]} | awk '{print $2}')
+  rfc931=$(echo ${my_array[$i]} | awk '{print $2}')
   echo -n "$rfc931|" >> $OUTPUT_FILE
 
-  user_auth=$(echo ${my_array1[$i]} | awk '{print $3}')
+  user_auth=$(echo ${my_array[$i]} | awk '{print $3}')
   echo -n "$user_auth|" >> $OUTPUT_FILE
 
-  date_time=$(echo ${my_array1[$i]} | awk '{print $4}')
+  date_time=$(echo ${my_array[$i]} | awk '{print $4}')
   echo -n "$date_time|" >> $OUTPUT_FILE
 
-  gmt_offset=$(echo ${my_array1[$i]} | awk '{print $5}')
+  gmt_offset=$(echo ${my_array[$i]} | awk '{print $5}')
   echo -n "$gmt_offset|" >> $OUTPUT_FILE
 
-  action=$(echo ${my_array1[$i]} | awk '{print $6,$7,$8}')
+  action=$(echo ${my_array[$i]} | awk '{print $6,$7,$8}')
   echo -n "$action|" >> $OUTPUT_FILE
 
-  return_code=$(echo ${my_array1[$i]} | awk '{print $9}')
+  return_code=$(echo ${my_array[$i]} | awk '{print $9}')
   echo -n "$return_code|" >> $OUTPUT_FILE
 
-  size_code=$(echo ${my_array1[$i]} | awk '{print $10}')
+  size_code=$(echo ${my_array[$i]} | awk '{print $10}')
   echo -n "$size_code|" >> $OUTPUT_FILE
 
-  refferer=$(echo ${my_array1[$i]} | awk '{print $11}')
+  refferer=$(echo ${my_array[$i]} | awk '{print $11}')
   echo -n "$refferer|" >> $OUTPUT_FILE
 
-  accpoInfo=$(echo ${my_array1[$i]} | awk '{print $12,$13,$14,$15}')
+  accpoInfo=$(echo ${my_array[$i]} | awk '{print $12,$13,$14,$15}')
   accpoInfo=$(echo $accpoInfo | sed 's/.$//g')
   echo -n "$accpoInfo|" >> $OUTPUT_FILE
 

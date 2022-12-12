@@ -1,4 +1,3 @@
-actions
 non_existant_folder0
 AMDMIGraphX
 non_existant_folder1

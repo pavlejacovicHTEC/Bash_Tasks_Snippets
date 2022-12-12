@@ -1,5 +1,39 @@
 #!/bin/bash
 
+function1() {
+    for dir in $1/*;do # for all in the root
+
+     #if folder has whitespace in name, add escape character so linux understands it
+      if [[ $dir =~ ( |\') ]];
+      then
+        #echo "Directory has spaces: $dir"
+        dir=$(echo $dir | sed 's/ /\\ /g')
+        #echo "Changing to $dir"
+      fi
+
+      if [[ -d $dir && -d "$dir/.git" ]];
+      then
+        temp0=$(echo $dir | awk -F/ '{print $NF}')
+        temp1=$(cat $IGNORE_FILE | grep $temp0)
+
+        if [[ $temp1 == "" ]];
+        then
+          echo ""
+
+          echo "Changing directory to $dir ....."
+          cd $dir
+
+          current_branch=$(git rev-parse --abbrev-ref HEAD)
+          echo "Running the command git $COMMAND on branch $current_branch on repo $temp0"
+          git $COMMAND
+
+          cd $DIRECTORY_LOCATION
+        fi
+
+      fi
+    done
+}
+
 #load arguments into variables
 while getopts d:i:c:l: flag
 do
@@ -55,56 +89,6 @@ then
   exit 0;
 fi
 
+function1 $DIRECTORY_LOCATION
 
-#Iterate through folders and pull changes for every folder that is not excluded in the ignore file
-for dir in $DIRECTORY_LOCATION*;
-do
-
-  if [[ -d $dir ]];
-  then
-    cd "$dir"
-  fi
-
-  for (( i=0; i<$DEPTH_LEVEL; i++ ))
-  do
-    for dir2 in $dir/*; do
-
-      if [[ -d $dir2 ]];
-      then
-        echo "dir2: $dir2"
-      fi
-
-      #if folder has whitespace in name, add escape character so linux understands it
-#      if [[ $dir =~ ( |\') ]];
-#      then
-#        #echo "Directory has spaces: $dir"
-#        dir=$(echo $dir | sed 's/ /\\ /g')
-#        #echo "Changing to $dir"
-#      fi
-#
-#      if [[ -d $dir && -d "$dir/.git" ]];
-#      then
-#        temp0=$(echo $dir | awk -F/ '{print $NF}')
-#        temp1=$(cat $IGNORE_FILE | grep $temp0)
-#
-#        if [[ $temp1 == "" ]];
-#        then
-#          echo ""
-#
-#          echo "Changing directory to $dir ....."
-#          cd $dir
-#
-#          current_branch=$(git rev-parse --abbrev-ref HEAD)
-#          echo "Running the command git $COMMAND on branch $current_branch on repo $temp0"
-#          git $COMMAND
-#
-#          cd $DIRECTORY_LOCATION
-#        fi
-#
-#      fi
-    done
-
-  done
-
-done
 

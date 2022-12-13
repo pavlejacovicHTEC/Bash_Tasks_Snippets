@@ -56,7 +56,7 @@ then
 fi
 
 # loop & print a folder recusively,
-function1() {
+get_folders_on_wanted_depth() {
     for i in "$1"/*;do
         number_of_slashes_subpath=$(echo $i | awk -F"/" '{print NF-1}')
         dash_numbers=$(($2+$3))
@@ -67,7 +67,7 @@ function1() {
             then
               target_folders_array+=($i)
             fi
-            function1 $i $2 $3
+            get_folders_on_wanted_depth $i $2 $3
         fi
 
     done
@@ -76,7 +76,7 @@ function1() {
 number_of_slashes_path=$(echo $DIRECTORY_LOCATION | awk -F"/" '{print NF-1}')
 DIRECTORY_LOCATION=${DIRECTORY_LOCATION::-1}
 
-function1 $DIRECTORY_LOCATION $DEPTH_LEVEL $number_of_slashes_path
+get_folders_on_wanted_depth $DIRECTORY_LOCATION $DEPTH_LEVEL $number_of_slashes_path
 
 for element in "${target_folders_array[@]}"
 do

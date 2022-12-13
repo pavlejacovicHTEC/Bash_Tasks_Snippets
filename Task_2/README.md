@@ -29,5 +29,4 @@ Additional:
 
 ### task2_way3.sh
 
-## TO DO
-1. Add depth level as argument
+Added depth level as argument, recursion implemented

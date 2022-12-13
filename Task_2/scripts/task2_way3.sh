@@ -1,39 +1,5 @@
 #!/bin/bash
 
-function1() {
-    for dir in $1/*;do # for all in the root
-
-     #if folder has whitespace in name, add escape character so linux understands it
-      if [[ $dir =~ ( |\') ]];
-      then
-        #echo "Directory has spaces: $dir"
-        dir=$(echo $dir | sed 's/ /\\ /g')
-        #echo "Changing to $dir"
-      fi
-
-      if [[ -d $dir && -d "$dir/.git" ]];
-      then
-        temp0=$(echo $dir | awk -F/ '{print $NF}')
-        temp1=$(cat $IGNORE_FILE | grep $temp0)
-
-        if [[ $temp1 == "" ]];
-        then
-          echo ""
-
-          echo "Changing directory to $dir ....."
-          cd $dir
-
-          current_branch=$(git rev-parse --abbrev-ref HEAD)
-          echo "Running the command git $COMMAND on branch $current_branch on repo $temp0"
-          git $COMMAND
-
-          cd $DIRECTORY_LOCATION
-        fi
-
-      fi
-    done
-}
-
 #load arguments into variables
 while getopts d:i:c:l: flag
 do
@@ -89,6 +55,45 @@ then
   exit 0;
 fi
 
-function1 $DIRECTORY_LOCATION
+# loop & print a folder recusively,
+function1() {
+    for i in "$1"/*;do
+        number_of_slashes_subpath=$(echo $i | awk -F"/" '{print NF-1}')
+        dash_numbers=$(($2+$3))
 
+        if [[ -d "$i" && $number_of_slashes_subpath -le $dash_numbers ]];
+        then
+            if [[ -d "$i/.git" ]];
+            then
+              target_folders_array+=($i)
+            fi
+            function1 $i $2 $3
+        fi
 
+    done
+}
+
+number_of_slashes_path=$(echo $DIRECTORY_LOCATION | awk -F"/" '{print NF-1}')
+DIRECTORY_LOCATION=${DIRECTORY_LOCATION::-1}
+
+function1 $DIRECTORY_LOCATION $DEPTH_LEVEL $number_of_slashes_path
+
+for element in "${target_folders_array[@]}"
+do
+  temp0=$(echo $element | awk -F/ '{print $NF}')
+  temp1=$(cat $IGNORE_FILE | grep $temp0)
+
+  if [[ $temp1 == "" ]];
+  then
+    echo "Changing directory to $element ....."
+    cd $element
+
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+    echo "Running the command git $COMMAND on branch $current_branch on repo $temp0"
+    git $COMMAND
+
+    cd $DIRECTORY_LOCATION/
+    echo ""
+  fi
+
+done

@@ -47,7 +47,7 @@ while read -r line; do
     #removes ] [ and " characters
     line=$(echo $line | sed 's/\]//g; s/\[//g; s/"//g' )
 
-    temp1=$(echo "$line" |awk '{print $1}')
+    temp1=$(echo "$line" | awk '{print $1}')
     temp2=$(echo "${my_array[@]}" | grep "$temp1")
 
     if [[ ${#temp2} == 0 ]];
